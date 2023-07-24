@@ -29,6 +29,7 @@
 <p>SMTP_USERNAME=smtp_username</p>
 <p>SMTP_PASSWORD=smtp_password</p>
 <p>FROM_ADDR=from_addr</p>
+<p>TRY_COUNT=try_count</p>
 
 # Execute o comando abaixo para rodar o projeto
 <p>python3 main.py</p>
