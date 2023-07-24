@@ -8,7 +8,7 @@
 # Clone o projeto
 <p>git clone https://github.com/danbsilva/CodeGroup.git</p> 
 
-# Path: CodeGoup
+# Path: CodeGroup
 <p>cd CodeGroup</p> 
 
 # Crie um ambiente virtual
