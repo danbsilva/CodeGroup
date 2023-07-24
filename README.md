@@ -1,15 +1,15 @@
-# Desafio CodeGoup
+# Desafio CodeGroup
 
 # Descrição do Projeto
-<p>Projeto desenvolvido para o desafio da CodeGoup</p>
+<p>Projeto desenvolvido para o desafio da CodeGroup</p>
 <p>Este projeto tem como objetivo realizar a consulta de informações de colaboradores de uma planilha "Colaboradors.xlsx" no LinkedIn, consultar a previsão do tempo de uma cidade e enviar um e-mail com as informações coletadas.</p>
 
 
 # Clone o projeto
-<p>git clone https://github.com/danbsilva/CodeGoup.git</p> 
+<p>git clone https://github.com/danbsilva/CodeGroup.git</p> 
 
 # Path: CodeGoup
-<p>cd CodeGoup</p> 
+<p>cd CodeGroup</p> 
 
 # Crie um ambiente virtual
 <p>python3 -m venv venv</p>
