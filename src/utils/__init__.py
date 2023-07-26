@@ -15,7 +15,7 @@ class Browser:
 
         service = Service(ChromeDriverManager().install())  # Create instance of Service class
 
-        driver = webdriver.Chrome(options=options, service=service, keep_alive=True)
+        driver = webdriver.Chrome(options=options, service=service, keep_alive=True)  # Create instance of Chrome class
         driver.maximize_window()  # Maximize the window
         driver.get(self.url)  # Open the url
 

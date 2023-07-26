@@ -5,19 +5,24 @@ from src import schemas
 from src import apis
 from src import mail
 from src.logging import Logging
+from src import recipients
+import os
 
-path_collaborators = 'Colaboradores.xlsx'
-
+path_collaborators = os.path.join(os.path.dirname(__file__), 'Colaboradores.xlsx')
+addrs = recipients.address()
 
 def main():
     try_count = int(config('TRY_MAX'))
     logging = Logging()  # Create instance of Logging class
+
+    # Try to execute the automation
     while try_count > 0:
-        # Create instance of LinkedIn class
-        linkedin = Linkedin()
-        api = apis.API()
+
+        linkedin = Linkedin()  # Create instance of Linkedin class
+        api = apis.API()  # Create instance of API class
 
         logging.info('Starting the automation')  # Logging the start of automation
+        logging.info(f'Try count: {try_count}')  # Logging the try count
 
         # Login in Linkedin
         login = linkedin.login(config('LINKEDIN_USER'), config('LINKEDIN_PWD'))
@@ -78,28 +83,23 @@ def main():
                             collaborators.loc[index, 'Clima'] = collaborator.climate
 
                             # Save the file
-                            collaborators.to_excel('src/Colaboradores.xlsx', index=False)
+                            collaborators.to_excel(path_collaborators, index=False)
 
-                            email_collaborators.append(
-                                collaborator)  # Add the collaborator in the list of collaborators to send e-mail
+                            # Add the collaborator in the list of collaborators to send e-mail
+                            email_collaborators.append( collaborator)
 
             # Send the e-mail with the file
-            mail.sendmail('danilloaugustobsilva@hotmail.com', 'Resultado', email_collaborators, path_collaborators)
+            mail.sendmail(addrs, 'Resultado', email_collaborators, path_collaborators)
 
             logging.info('Automation finished successfully')  # Logging the end of automation
             break
 
         try_count -= 1
         logging.warning(f'Automation finished with error. Try count: {try_count}')
-        linkedin = None
 
         if try_count == 0:
             logging.critical('Automation finished with error')
             break
-
-
-
-
 
 
 if __name__ == '__main__':

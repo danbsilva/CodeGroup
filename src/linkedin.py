@@ -27,11 +27,10 @@ class Linkedin:
             # Click in the button
             self.driver.find_element(By.CSS_SELECTOR, ".btn__primary--large").click()
 
-            current_url = self.driver.current_url  # Get the current url
-            sleep(5)
-            if 'feed' not in current_url:
-                self.logging.info('Error to login!')
-                return 'Error to login!', False
+            current_url = 'https://www.linkedin.com/feed/'
+
+            self.logging.info('Waiting to show feed')  # Logging the waiting to show feed
+            self.wait_show_feed(current_url)
 
             self.logging.info('Login successfully!')  # Logging the login successfully
             return 'Login successfully!', True  # Return the message and True
@@ -112,3 +111,14 @@ class Linkedin:
         except Exception as e:
             self.logging.error(e)  # Logging the error
             return f'Error to search office and company of {collaborator.name}!', False  # Return the message and False
+
+    def wait_show_feed(self, current_url):
+        while True:
+            if 'feed' not in current_url:
+                continue
+            else:
+                self.logging.info('Feed showed!')  # Logging the feed showed
+                break
+
+    def close(self):
+        self.driver.close()

@@ -59,7 +59,8 @@ def email_body(body):
     """.format(html)
 
 
-def sendmail(to, subject, body, attach=None):
+def sendmail(addrs, subject, body, attach=None):
+
     # Configurations to send e-mail
     smtp_server = config('SMTP_SERVER')
     smtp_port = config('SMTP_PORT')
@@ -70,28 +71,33 @@ def sendmail(to, subject, body, attach=None):
     # Create the body of the message (a plain-text and an HTML version).
     body = email_body(body)
 
-    msg = MIMEMultipart()
-    msg['Subject'] = subject
-    msg['From'] = from_addr
-    msg['To'] = to
+    for to in addrs:  # Iterate over the recipients
 
-    if attach:  # If has attachment
-        with open(attach, 'rb') as file:
-            part = MIMEBase('application', 'octet-stream')
-            part.set_payload(file.read())
-        encoders.encode_base64(part)
-        part.add_header('Content-Disposition', f'attachment; filename="{path.basename(attach)}"')
-        msg.attach(part)
+        logging.info(f"Sending e-mail to {to}")  # Logging the e-mail that will be sent
 
-    msg.attach(MIMEText(body, 'html'))
+        msg = MIMEMultipart()
+        msg['Subject'] = subject
+        msg['From'] = from_addr
+        msg['To'] = to
 
-    server = smtplib.SMTP(smtp_server, int(smtp_port))  # Create server
-    try:
-        server.starttls()
-        server.login(smtp_username, smtp_password)
-        server.sendmail(from_addr, to, msg.as_string())
-        logging.info(f"Sent e-mail to {to}")
-    except Exception as e:
-        logging.error(f"Error to send e-mail to {to}: {e}")
-    finally:
-        server.quit()
+        if attach:  # If has attachment
+            with open(attach, 'rb') as file:
+                part = MIMEBase('application', 'octet-stream')
+                part.set_payload(file.read())
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition', f'attachment; filename="{path.basename(attach)}"')
+            msg.attach(part)
+
+        msg.attach(MIMEText(body, 'html'))
+
+        server = smtplib.SMTP(smtp_server, int(smtp_port))  # Create server
+
+        try:
+            server.starttls()
+            server.login(smtp_username, smtp_password)
+            server.sendmail(from_addr, to, msg.as_string())
+            logging.info(f"Sent e-mail to {to}")  # Logging the e-mail that was sent
+        except Exception as e:
+            logging.error(f"Error to send e-mail to {to}: {e}")  # Logging the error to send e-mail
+        finally:
+            server.quit()
